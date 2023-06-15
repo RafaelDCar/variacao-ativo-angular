@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -11,6 +11,12 @@ export class BaseService {
   public apiUrl = environment.urlApi;
 
   constructor(private httpClient: HttpClient) { }
+
+  get(url:string) {
+    return this.httpClient.get(`${this.apiUrl}${url}`).pipe(
+      catchError(this.handleError)
+    )
+  }
 
   post(url: string , body: Object) {
     return this.httpClient.post(`${this.apiUrl}${url}`, body).pipe(

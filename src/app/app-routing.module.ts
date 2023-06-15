@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: 'variacao',
     loadChildren: () =>
-      import('./modules/ativo/ativo.module').then((m) => m.AtivoModule),
+      import('./modules/ativo/asset.module').then((m) => m.AssetModule),
   },
   {
     path: '',

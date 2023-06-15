@@ -1,1 +1,34 @@
-<p>view works!</p>
+<div class="container">
+  <div class="form-container">
+		<form
+			class="form-container__form"
+			action="submit" 
+			[formGroup]="assetForm"
+			(ngSubmit)="onSubmit()">
+
+		<div class="form-container__form-input">
+			<input
+          id="first-name"
+          type="text"
+          formControlName="name"
+          placeholder="Nome:"
+        />
+
+		</div>
+
+		<div class="wrapper">
+			<div class="wrapper__actions">
+				<!--<span class="message--error" *ngIf="apiMessage?.error">{{apiMessage?.message}}</span>
+				<span class="message--success" *ngIf="!apiMessage?.error">{{apiMessage?.message}}</span>-->
+				<button
+					class="wrapper__btn"
+					type="submit"
+					[disabled]="!assetForm.valid"
+				>
+					Enviar
+				</button>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
