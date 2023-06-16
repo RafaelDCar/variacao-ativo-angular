@@ -9,6 +9,8 @@ import { AssetAdapterService } from '../../adpter/asset-adapter.service';
 })
 export class ViewComponent implements OnInit {
 
+  public assetData:any = []
+
   constructor(public assetAdapter: AssetAdapterService) { }
 
   ngOnInit(): void {
@@ -19,8 +21,8 @@ export class ViewComponent implements OnInit {
   })
 
   onSubmit() {
-    this.assetAdapter.getAssetVariation(this.assetForm.value.name)
-    //console.log(this.assetForm.value);
+    this.assetData = this.assetAdapter.getAssetVariation('')
+    console.log(this.assetData);
     
   }
 

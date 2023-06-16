@@ -13,6 +13,6 @@ export class AssetService {
   constructor(private baseService: BaseService) { }
 
   checkAssetVariation(asset:string): Observable<assetModel> {
-    return this.baseService.get(`${this.apiUrl}/${asset}`)
+    return this.baseService.get('assets/data.json')
   }
 }

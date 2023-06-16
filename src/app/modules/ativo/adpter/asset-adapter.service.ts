@@ -10,8 +10,6 @@ export class AssetAdapterService {
   constructor(private assetService: AssetService) { }
 
   getAssetVariation(assetName: string) {
-    return this.assetService.checkAssetVariation(assetName).pipe(
-      tap((res) => console.log(res))
-    ).subscribe()
+    return this.assetService.checkAssetVariation(assetName).subscribe();
   }
 }
