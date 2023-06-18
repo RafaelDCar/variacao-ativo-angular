@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, throwError, map } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -14,7 +14,6 @@ export class BaseService {
 
   get(url:string) {
     return this.httpClient.get(`${url}`).pipe(
-      map(data => data),
       catchError(this.handleError)
     )
   }

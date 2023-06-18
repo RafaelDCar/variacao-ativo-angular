@@ -1,34 +1,24 @@
 <div class="container">
-  <div class="form-container">
-		<form
-			class="form-container__form"
-			action="submit" 
-			[formGroup]="assetForm"
-			(ngSubmit)="onSubmit()">
-
-		<div class="form-container__form-input">
-			<input
-          id="first-name"
-          type="text"
-          formControlName="name"
-          placeholder="Nome:"
-        />
-
-		</div>
-
-		<div class="wrapper">
-			<div class="wrapper__actions">
-				<!--<span class="message--error" *ngIf="apiMessage?.error">{{apiMessage?.message}}</span>
-				<span class="message--success" *ngIf="!apiMessage?.error">{{apiMessage?.message}}</span>-->
-				<button
-					class="wrapper__btn"
-					type="submit"
-					[disabled]="!assetForm.valid"
-				>
-					Enviar
-				</button>
-			</div>
-		</div>
-		</form>
-	</div>
+  <div class="side">
+    <table>
+      <thead>
+        <tr>
+          <th>Dia</th>
+          <th>Data</th>
+          <th>Valor</th>
+          <th>Variação em relaçào a D-1</th>
+          <th>Variação em relação a primeira data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dado of assetVariation">
+          <td>{{ dado.pregao }}</td>
+					<td>{{ dado.abertura | currency:'BRL'}}</td>
+          <td>{{ dado.fechamento | currency:'BRL' }}</td>
+          <td>{{ dado.diferencaPercentual }}%</td>
+          <td>{{ dado.diferencaPercentualInicio }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

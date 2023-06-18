@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from 'src/app/shared/service/base-service.service';
-import { assetModel } from '../shared/models/asset-model';
+import { AssetModel } from '../shared/models/asset-model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,11 +8,12 @@ import { Observable } from 'rxjs';
 })
 export class AssetService {
 
-  private apiUrl: string = `v8/finance/chart`;
+  //private apiUrl: string = `v8/finance/chart`;
+  //https://query1.finance.yahoo.com/v8/finance/chart/PETR4.SA?range=1mo&interval=1d
 
   constructor(private baseService: BaseService) { }
 
-  checkAssetVariation(asset:string): Observable<assetModel> {
+  checkAssetVariation(): Observable<AssetModel> {
     return this.baseService.get('assets/data.json')
   }
 }
