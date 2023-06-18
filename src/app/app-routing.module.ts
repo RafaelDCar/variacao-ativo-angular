@@ -3,18 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'variacao',
+    path: '',
     loadChildren: () =>
       import('./modules/ativo/asset.module').then((m) => m.AssetModule),
   },
   {
-    path: '',
-    redirectTo: 'variacao',
-    pathMatch: 'full'
-  },
-  {
     path: '**',
-    redirectTo: 'variacao'
+    redirectTo: ''
   }
 ];
 

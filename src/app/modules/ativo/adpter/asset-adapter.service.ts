@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AssetService } from '../service/asset.service';
-import { BehaviorSubject, take, tap } from 'rxjs'
+import { BehaviorSubject, map, take, tap } from 'rxjs'
 import { AssetData, AssetVariation } from '../shared/models/asset-model';
 
 @Injectable({
@@ -14,19 +14,28 @@ export class AssetAdapterService {
     this.getAssetVariation().subscribe();
   }
 
-  public getAssetVariation() {
-    return this.assetService.checkAssetVariation().pipe(
-      take(1),
-      tap((data: any) => {
-        const dados: AssetData = data['chart']['result'][0]['indicators']['quote'][0];
-        const dias: number[] = data['chart']['result'][0]['timestamp'];
-
-        this.generateAssetChartVariation(dados, dias);       
-      })
-    )
+  public getAssetChartVariation() {
+    return this.getVariationdata();
   }
 
-  generateAssetChartVariation(dados: AssetData, dias: number[]) {
+  public getAssetVariation() {
+    return this.getVariationdata().pipe(
+      tap(({dados, dias}) => this.evalueteAssetVariation(dados, dias))
+    )          
+  }
+
+  private getVariationdata() {
+    return this.assetService.checkAssetVariation().pipe(
+      take(1),
+      map((data: any) => {
+      return {
+        dados: data['chart']['result'][0]['indicators']['quote'][0],
+        dias:  data['chart']['result'][0]['timestamp']
+      }})
+    );
+  }
+
+  private evalueteAssetVariation(dados: AssetData, dias: number[]) {
     const primeiroFechamento = dados['close'][0];
     const assetVariation: AssetVariation[] = [];
 
@@ -49,13 +58,9 @@ export class AssetAdapterService {
     });
 
     this.assetVariation$.next(assetVariation);
-
   }
 
-  getAssetVariationData() {
+  public getAssetVariationData() {
     return this.assetVariation$.asObservable();
   }
-
 }
-
-
