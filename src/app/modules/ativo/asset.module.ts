@@ -6,6 +6,7 @@ import { AssetRoutingModule } from './asset-routing.module';
 import { ContainerComponent } from './components/container/container.component';
 import { ViewComponent } from './components/view/view.component';
 import { ChartComponent } from './components/chart/chart.component';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ChartComponent } from './components/chart/chart.component';
     CommonModule,
     ReactiveFormsModule,
     AssetRoutingModule,
+    HighchartsChartModule
   ]
 })
 export class AssetModule { }

@@ -39,19 +39,19 @@ export class AssetAdapterService {
     const primeiroFechamento = dados['close'][0];
     const assetVariation: AssetVariation[] = [];
 
-    dias.map((dia, index) => {
+    dias.forEach((dia, index) => {
 
       const fechamentoAtual = dados['close'][index];
-      const fechamentoAnterior = dados['close'][index - 1];
-      const diferencaPercentual = ((fechamentoAtual - fechamentoAnterior) / fechamentoAnterior) * 100;
+      const fechamentoAnterior = dados['close'][index - 1] || 0;
+      const diferencaPercentual = fechamentoAnterior ? ((fechamentoAtual - fechamentoAnterior) / fechamentoAnterior) * 100 : 0;
       const diferencaPercentualInicio = ((fechamentoAtual - primeiroFechamento) / primeiroFechamento) * 100;
 
-      const variation =  {
+      const variation: AssetVariation =  {
         pregao: new Date(dia * 1000).toLocaleDateString(),
         abertura: dados['open'][index],
         fechamento: fechamentoAtual,
-        diferencaPercentual: diferencaPercentual.toFixed(2) ? diferencaPercentual.toFixed(2) : null,
-        diferencaPercentualInicio: diferencaPercentualInicio.toFixed(2) ? diferencaPercentualInicio.toFixed(2) : null
+        diferencaPercentual: diferencaPercentual.toFixed(2) || null,
+        diferencaPercentualInicio: diferencaPercentualInicio.toFixed(2) || null
       }
 
       assetVariation.push(variation);

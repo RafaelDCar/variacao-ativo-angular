@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AssetAdapterService } from '../../adpter/asset-adapter.service';
 import { tap } from 'rxjs';
+import * as Highcharts from 'highcharts'
 
 @Component({
   selector: 'chart',
@@ -9,10 +10,22 @@ import { tap } from 'rxjs';
 })
 export class ChartComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('chartCanvas', { static: false }) chartCanvas: ElementRef | null = null
-  public chart: null = null;
-
   constructor(private assetAdapter: AssetAdapterService) { }
+
+  Highcharts = Highcharts;
+  linechart: any = {
+    series: [
+      {
+        data: [1, 2, 3],
+      },
+    ],
+    chart: {
+      type: 'line',
+    },
+    title: {
+      text: 'linechart',
+    },
+  };
 
   ngOnInit(): void {
   }
