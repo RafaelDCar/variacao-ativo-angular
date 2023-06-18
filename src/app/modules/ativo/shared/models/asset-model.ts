@@ -24,7 +24,7 @@ export interface AssetData {
 export interface AssetVariation {
 	pregao: string;
 	abertura: string;
-	fechamento: string;
-	diferencaPercentual?: string | null;
-	diferencaPercentualInicio?: string | null;
+	fechamento: number;
+	diferencaPercentual?: number | null;
+	diferencaPercentualInicio?: number | null;
 }

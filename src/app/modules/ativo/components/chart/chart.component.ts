@@ -1,50 +1,85 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import * as Highcharts from 'highcharts';
 import { AssetAdapterService } from '../../adpter/asset-adapter.service';
-import { tap } from 'rxjs';
-import * as Highcharts from 'highcharts'
+import { AssetVariation } from '../../shared/models/asset-model';
+import { delay, finalize, tap } from 'rxjs';
 
 @Component({
   selector: 'chart',
   templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss']
+  styleUrls: ['./chart.component.scss'],
 })
-export class ChartComponent implements OnInit, AfterViewInit {
+export class ChartComponent {
+  chartCloseVRef: any;
+  chartVariationRef: any;
 
-  constructor(private assetAdapter: AssetAdapterService) { }
+  HighchartsCloseValue: typeof Highcharts = Highcharts;
+  HighchartsVariationValue: typeof Highcharts = Highcharts;
+  
+  constructor(private assetAdapter: AssetAdapterService) {
+    this.updateChart();
+  }
 
-  Highcharts = Highcharts;
-  linechart: any = {
+  public chartOptionsCloseValue: Highcharts.Options = {
+    title: {
+      text: 'Variação no fechamento',
+      align: 'left',
+    },
+    
     series: [
       {
-        data: [1, 2, 3],
+        type: 'line',
+        data: [],
       },
     ],
-    chart: {
-      type: 'line',
-    },
-    title: {
-      text: 'linechart',
-    },
   };
 
-  ngOnInit(): void {
+  public chartOptionsVariation: Highcharts.Options = {
+    title: {
+      text: 'Variação em relação ao primeiro pregão da serie',
+      align: 'left',
+    },
+    
+    series: [
+      {
+        type: 'line',
+        data: [],
+      },
+    ],
+  };
+
+  chartCallback: Highcharts.ChartCallbackFunction = (chart) => {
+    this.chartCloseVRef = chart;
+  };
+
+  chartVariationCallback: Highcharts.ChartCallbackFunction = (chart) => {
+    this.chartVariationRef = chart;
+  };
+
+  private updateChart() {
+    const chartData: number[] = [];
+    const chartVariationData: number[] = [];
+    this.assetAdapter
+      .getAssetVariationData()
+      .pipe(
+        tap((variations: AssetVariation[]) => {
+          variations.forEach((variation) => {
+            chartData.push(variation.fechamento);
+            chartVariationData.push(variation.diferencaPercentualInicio!)
+          });
+        }),
+        delay(500)
+      )
+      .subscribe(() => {
+        this.updateChartWithValue(this.chartCloseVRef, chartData);
+        this.updateChartWithValue(this.chartVariationRef, chartVariationData);
+      });
   }
 
-  ngAfterViewInit() {
-
+  updateChartWithValue(chartRef: any ,chartData: any[]) {
+    chartRef.series[0].update({
+      data: chartData,
+      type: 'line',
+    });
   }
-
-  getChart() {
-    this.assetAdapter.getAssetChartVariation().pipe(
-      tap(({dados, dias}) => {
-        const precoFechamento = dados['close'];
-
-        // this.chart ? this.chart.data.labels = dias.map((dia: any) => new Date(dia * 1000)): null;
-        // this.chart ? this.chart.data.datasets[0].data = precoFechamento: null;
-        // this.chart?.update();
-
-      })
-    ).subscribe()
-  }
-
 }

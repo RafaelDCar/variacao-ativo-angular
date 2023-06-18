@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AssetVariation } from '../../shared/models/asset-model';
+import { AssetAdapterService } from '../../adpter/asset-adapter.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'container',
@@ -6,8 +9,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./container.component.scss']
 })
 export class ContainerComponent implements OnInit {
+  
+  data: number[] = [];
 
-  constructor() { }
+  constructor(private assetAdapter: AssetAdapterService) {
+    const data: number[] = []
+    this.assetAdapter.getAssetVariationData().pipe(
+      tap((variations: AssetVariation[] ) => {
+        variations.forEach(variation => {
+          data.push(variation.fechamento)
+        })
+      })
+    ).subscribe(() => this.data = data)
+   }
 
   ngOnInit(): void {
   }

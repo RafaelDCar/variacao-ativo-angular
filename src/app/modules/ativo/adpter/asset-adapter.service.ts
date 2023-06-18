@@ -1,24 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AssetService } from '../service/asset.service';
-import { BehaviorSubject, map, take, tap } from 'rxjs'
+import { BehaviorSubject, Subscription, map, take, tap } from 'rxjs'
 import { AssetData, AssetVariation } from '../shared/models/asset-model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AssetAdapterService {
+export class AssetAdapterService implements OnDestroy {
 
   public assetVariation$ = new BehaviorSubject<AssetVariation[]>([]);
+  private subscription = new Subscription();
 
   constructor(private assetService: AssetService) { 
-    this.getAssetVariation().subscribe();
+    this.subscription = this.getAssetVariationTable().subscribe();
   }
 
   public getAssetChartVariation() {
     return this.getVariationdata();
   }
 
-  public getAssetVariation() {
+  public getAssetVariationTable() {
     return this.getVariationdata().pipe(
       tap(({dados, dias}) => this.evalueteAssetVariation(dados, dias))
     )          
@@ -50,8 +51,8 @@ export class AssetAdapterService {
         pregao: new Date(dia * 1000).toLocaleDateString(),
         abertura: dados['open'][index],
         fechamento: fechamentoAtual,
-        diferencaPercentual: diferencaPercentual.toFixed(2) || null,
-        diferencaPercentualInicio: diferencaPercentualInicio.toFixed(2) || null
+        diferencaPercentual: diferencaPercentual || null,
+        diferencaPercentualInicio: diferencaPercentualInicio || null
       }
 
       assetVariation.push(variation);
@@ -62,5 +63,9 @@ export class AssetAdapterService {
 
   public getAssetVariationData() {
     return this.assetVariation$.asObservable();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription ? this.subscription.unsubscribe : null;
   }
 }
